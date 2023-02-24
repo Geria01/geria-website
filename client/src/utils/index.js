@@ -1,12 +1,11 @@
-const baseUrl = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
 const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
 const fetchQuery = async (path, params = null) => {
   let url = null;
   if (params !== null) {
-    url = `${baseUrl}/${path}/${params}`
+    url = `${strapiUrl}/api/${path}/${params}`
   } else {
-    url = `${baseUrl}/${path}`
+    url = `${strapiUrl}/api/${path}`
   }
   const response = await fetch(`${url}`)
   const data = await response.json()
@@ -14,4 +13,11 @@ const fetchQuery = async (path, params = null) => {
   return data;
 }
 
-export { baseUrl, fetchQuery, strapiUrl }
+const strapiImageLoader = ({ src, width, quality = null }) => {
+  const pattern = new RegExp('^(https?)://');
+  return pattern.test(src) ?
+    `${src}?w=${width}&q=${quality || 75}` :
+    `${strapiUrl}${src}?w=${width}&q=${quality || 75}`;
+}
+
+export { fetchQuery, strapiUrl, strapiImageLoader }

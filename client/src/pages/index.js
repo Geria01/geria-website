@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
 
-import { fetchQuery, baseUrl, strapiUrl } from '@/utils';
+import { fetchQuery, strapiUrl } from '@/utils';
 import Button from '@/components/Button';
 import TalentCard from '@/components/TalentCard';
 import brandLogo1 from '@/public/images/brand_logo_1.png';
@@ -23,8 +23,7 @@ const strapiImageLoader = ({ src, width, quality = null }) => {
   const pattern = new RegExp('^(https?)://');
   return pattern.test(src) ?
     `${src}?w=${width}&q=${quality || 75}` :
-    `${strapiUrl}${src}?w=${width}&q=${quality || 75}`;
-
+    `${strapiUrl}${src}?w=${width}&q=${quality || 75}`; strapiUrl
 }
 
 export const getStaticProps = async (context) => {
@@ -83,7 +82,7 @@ const Home = ({ data }) => {
           <div className='order-2 md:order-1 max-w-[560px]'>
             <h1 className='text-4xl md:text-5xl lg:text-7xl mb-8 mt-8 md:mt-0'>{hero.heading}</h1>
             <p className='mb-14'>{hero.description}</p>
-            <Button bg={'#FECC00'} label={'Hire Now!'} href={'/hire-now'} />
+            <Button classes={"bg-[#FECC00]"} label={'Hire Now!'} href={'/hire-now'} />
           </div>
           <div className='order-1 md:order-2 grid grid-cols-2 gap-4'>
             <div className='flex justify-center items-center'>
@@ -172,7 +171,6 @@ const Home = ({ data }) => {
           </div>
         </div>
       </div>
-
       <div className='container max-w-screen-xl px-5'>
         <div className='grid grid-cols-1 md:grid-cols-2 py-8 lg:py-16'>
           <div className='flex flex-col justify-center align-center max-w-[480px] mb-5 md:mb-0'>
@@ -189,7 +187,6 @@ const Home = ({ data }) => {
           </div>
         </div>
       </div>
-
       <div className='container max-w-screen-xl px-5'>
         <div className='grid grid-cols-1 md:grid-cols-3 py-8 lg:py-16'>
           <div className='px-[42px] py-[40px] border border-x-transparent border-y-slate-200'>
@@ -217,18 +214,16 @@ const Home = ({ data }) => {
           </div>
         </div>
       </div>
-
       <div className='grid grid-cols-1 md:grid-cols-2'>
         <div className='h-auto md:h-[650px] flex bg-[#1C1B17] justify-center items-center px-4 md:px-8 lg:px-0 py-16 md:py-0'>
           <div className='max-w-[450px]'>
             <h2 className='text-3xl md:text-4xl lg:text-5xl text-white mb-6'>Looking For Talents?</h2>
             <p className='opacity-80 text-white mb-20'>Jump to the front of the queue and get vetted talents in as little as 3 working days. We&apos;ve got the hands you need to build the product you want.</p>
-            <Button bg={'#FECC00'} label={'Hire Now!'} href={'/hire-now'} />
+            <Button classes={"bg-[#FECC00]"} label={'Hire Now!'} href={'/hire-now'} />
           </div>
         </div>
         <div className='h-[352px] md:h-full w-full bg-[url("/images/img_2.jpg")] bg-no-repeat bg-cover'></div>
       </div>
-
       <div className='py-20 md:py-30 lg:py-40 px-5 bg-[#F9F9F9]'>
         <div className='grid grid-cols-1 md:grid-cols-2 justify-center items-center'>
           <div className='mx-auto mb-20 md:mb-0'>
@@ -237,11 +232,10 @@ const Home = ({ data }) => {
           <div className='max-w-[518px] px-4 lg:px-0'>
             <h2 className='text-3xl md:text-4xl lg:text-5xl mb-6'>Looking For Opportunities?</h2>
             <p className='opacity-80 mb-10 md:mb-20'>The demand is greater than ever before. Join our talent pool and get poached by tech companies that know your worth.</p>
-            <Button bg={'#1C1B17'} color={'#fff'} label={'Join our Talent Pool'} href={'/careers/join-now'} />
+            <Button classes={"bg-[#1C1B17] text-[#ffffff] "} label={'Join our Talent Pool'} href={'/register'} />
           </div>
         </div>
       </div>
-
       <div>
         <div className='container max-w-screen-xl px-5'>
           <div className='grid grid-cols-1 md:grid-cols-2 py-32'>
@@ -291,14 +285,13 @@ const Home = ({ data }) => {
           </div>
         </div>
       </div>
-
       <div className='bg-[#EBF5FF] py-20'>
         <div className='container max-w-screen-xl px-5'>
           <div className='flex flex-col md:flex-row w-full'>
             <h2 className='text-3xl md:text-4xl lg:text-5xl max-w-[400px] mb-6 md:mb-0'>Give Life To That Project Today</h2>
             <p className='max-w-[350px] opacity-70 ml-0 md:ml-10 mb-10 md:mb-0'>With the right team, anything is achievable. Let’s furnish you with the right hands to make your dreams work.</p>
             <span className='ml-0 md:ml-auto'>
-              <Button bg={'#FECC00'} color={'#1C1B17'} label={'Hire Now!'} href={'/careers/hire-now'} />
+              <Button classes={"bg-[#FECC00] text-[#1C1B17]"} label={'Hire Now!'} href={'/careers/hire-now'} />
             </span>
           </div>
         </div>

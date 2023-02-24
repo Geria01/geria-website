@@ -1,11 +1,19 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
-const Button = ({ bg, color, border, label, href }) => {
+const Button = ({ label, href, classes, iconUrl, iconClasses, iconHeight, iconWidth }) => {
   return (
     <Link
-      style={{ backgroundColor: bg, color: color, fontFamily: 'Clash Display' }}
-      className='text-[18px] inline-block py-4 px-10 rounded-2xl font-semibold'
+      className={`py-4 px-10 rounded-2xl font-semibold font[clash_display] ${classes}`}
       href={href}>
+      {iconUrl &&
+        <Image
+          className={iconClasses}
+          src={iconUrl}
+          height={iconHeight}
+          width={iconWidth}
+          alt={"Logo"}
+        />}
       {label}
     </Link>
   )
