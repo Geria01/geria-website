@@ -95,7 +95,7 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className='block'>
-                  <Link className='block text-black font-bold border border-[#FECC00] py-2.5 px-5 rounded-lg' href='/careers/join'>
+                  <Link className='block text-black font-bold border border-[#FECC00] py-2.5 px-5 rounded-lg' href='/login'>
                     Sign in
                   </Link>
                 </li>
