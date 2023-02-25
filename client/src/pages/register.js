@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import PhoneInput from 'react-phone-input-2';
@@ -9,6 +8,8 @@ import Button from '@/components/Button';
 import logo from '@/public/images/geria_logo.png';
 import close from '@/public/icons/close.svg';
 import linkedInBtnIcon from '@/public/images/linkedin-btn-icon.png';
+import { useAuth } from '@/context/AuthContext';
+import { useState } from 'react';
 
 const options = [
   {
@@ -26,25 +27,27 @@ const options = [
 ];
 
 const Register = () => {
+  const { register, setUser, loading, setLoading } = useAuth();
+  const [alert, setAlert] = useState(['', '']);
 
   const formRegister = async (e) => {
-    e.preventDefault();
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(values)
-    };
-
-    try {
-      let response = await fetch('/api/register', options);
-    } catch (err) {
-    }
+    setAlert(['', ''])
+    setLoading(true);
+    let response = await register(values);
+    console.log('response', response);
+    response[0] == 'error' ?
+      setAlert(response) :
+      setUser(response.username);
+    setLoading(false);
+    // router.push('/dashboard');
   }
 
-  const { handleChange, values, setValues, errors, handleSubmit } = useForm(formRegister);
+  const {
+    handleChange,
+    values,
+    setValues,
+    errors,
+    handleSubmit } = useForm(formRegister);
   const { phone } = values;
 
   return (
@@ -68,6 +71,7 @@ const Register = () => {
       </Link>
       <div className='mx-auto max-w-[472px] py-20 px-6'>
         <h1 className='text-[32px]'>Creat new account</h1>
+        {alert && <span className='inline-block py-5 text-rose-600'>{alert[1]}</span>}
         <form onSubmit={handleSubmit}>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             <div className='mb-3'>
@@ -206,16 +210,18 @@ const Register = () => {
             />
             {errors.password && <span className='text-xs text-red-600'>{errors.password}</span>}
           </div>
-          <button className={'w-full block py-4 px-10 rounded-2xl font-semibold font[clash_display] bg-[#1c1b17] text-center text-[#FFFFFF]'}>Sign up</button>
+          <button className={'w-full block py-4 px-10 rounded-lg font-semibold font[clash_display] bg-[#1c1b17] text-center text-[#FFFFFF]'}>
+            {loading ? 'Registering...' : 'Sign up'}
+          </button>
           <div className='my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-300 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-300'>
             <p className='mx-4 mb-0 text-center font-semibold'>
               Or register with socials
             </p>
           </div>
-          <Button classes={'mb-6 block text-center bg-[#ffffff] border border-[#D6DDEB]'} label={'Sign up with LinkedIn'} iconUrl={linkedInBtnIcon} iconClasses='inline-block mr-1' iconHeight={16} iconWidth={16} href={''} />
+          <Button classes={'mb-6 py-4 px-10 block text-center rounded-lg bg-[#ffffff] border border-[#D6DDEB]'} label={'Sign up with LinkedIn'} iconUrl={linkedInBtnIcon} iconClasses='inline-block mr-1' iconHeight={16} iconWidth={16} href={''} />
           <p>
             <span className='text-[#202430] opacity-70'>Have an account?</span>
-            <Link className='font-semibold text-[#1C1B17] opacity-100 ml-1' href={'/login'}>Sign In</Link>
+            <Link className='font-semibold text-[#1C1B17] opacity-100 ml-1' href={'/signin'}>Sign In</Link>
           </p>
         </form>
       </div>

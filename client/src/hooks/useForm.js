@@ -122,7 +122,7 @@ const useForm = (callback) => {
           ) {
             setErrors({
               ...errors,
-              password: 'Password should contains atleast 8 charaters and containing uppercase,lowercase and numbers'
+              password: 'Password should have atleast 8 characters, 1 uppercase, 1 lowercase character and numbers'
             })
           } else {
             let newObj = omit(errors, "password");
@@ -146,8 +146,7 @@ const useForm = (callback) => {
     if (event) event.preventDefault();
 
     if (Object.keys(errors).length === 0 && Object.keys(values).length !== 0) {
-      console.log('callback');
-      //callback();
+      callback();
     } else {
       const errors = {};
       for (let index = 0; index < fields.length; index++) {

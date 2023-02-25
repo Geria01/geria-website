@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 
+import { useAuth } from '@/context/AuthContext';
 import NavItem from './NavItem';
 import logo from '@/public/images/geria_logo.png';
 import styles from '../styles/Navbar.module.css';
@@ -15,7 +16,13 @@ const MENU_LIST = [
 
 const Navbar = () => {
   const [navActive, setNavActive] = useState(null);
+  const { isAuthenticated, signout } = useAuth();
 
+  const handleSignout = (e) => {
+    e.preventDefault();
+
+    signout();
+  }
   return (
     <header>
       <nav className='w-full bg-white-800'>
@@ -95,9 +102,15 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className='block'>
-                  <Link className='block text-black font-bold border border-[#FECC00] py-2.5 px-5 rounded-lg' href='/login'>
-                    Sign in
-                  </Link>
+                  {isAuthenticated ?
+                    <Link onClick={handleSignout} className='block text-black font-bold border border-[#FECC00] py-2.5 px-5 rounded-lg' href='/signin'>
+                      Sign out
+                    </Link>
+                    :
+                    <Link className='block text-black font-bold border border-[#FECC00] py-2.5 px-5 rounded-lg' href='/signin'>
+                      Sign in
+                    </Link>
+                  }
                 </li>
               </ul>
             </div>

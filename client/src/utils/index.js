@@ -20,4 +20,8 @@ const strapiImageLoader = ({ src, width, quality = null }) => {
     `${strapiUrl}${src}?w=${width}&q=${quality || 75}`;
 }
 
-export { fetchQuery, strapiUrl, strapiImageLoader }
+export {
+  fetchQuery,
+  strapiUrl,
+  strapiImageLoader
+}
