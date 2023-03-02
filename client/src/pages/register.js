@@ -1,15 +1,20 @@
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import PhoneInput from 'react-phone-input-2';
+import { ToastContainer } from 'react-toastify';
 import 'react-phone-input-2/lib/style.css'
 
+import { useAuth } from '@/context/auth';
 import useForm from '@/hooks/useForm';
 import Button from '@/components/Button';
 import logo from '@/public/images/geria_logo.png';
-import close from '@/public/icons/close.svg';
-import linkedInBtnIcon from '@/public/images/linkedin-btn-icon.png';
-import { useAuth } from '@/context/AuthContext';
-import { useState } from 'react';
+import Close from '@/public/icons/close.svg';
+import linkedInBtnIcon from '@/public/icons/linkedin-btn-icon.png';
+import { successToast } from '@/utils/toasts';
+import FullPageLoader from '@/components/FullPageLoader';
+
 
 const options = [
   {
@@ -27,19 +32,36 @@ const options = [
 ];
 
 const Register = () => {
-  const { register, setUser, loading, setLoading } = useAuth();
+  const { register, setUser, loading, setLoading, isAuthenticated } = useAuth();
   const [alert, setAlert] = useState(['', '']);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, loading, router]);
 
   const formRegister = async (e) => {
-    setAlert(['', ''])
+
     setLoading(true);
+
+    setAlert(['', ''])
+
     let response = await register(values);
-    console.log('response', response);
+
     response[0] == 'error' ?
       setAlert(response) :
-      setUser(response.username);
+      (() => {
+        setUser(response.username)
+        successToast('Registration successful!');
+        setTimeout(() => {
+          router.push('/signin');
+        }, 5000);
+      });
+
     setLoading(false);
-    // router.push('/dashboard');
+
   }
 
   const {
@@ -50,8 +72,22 @@ const Register = () => {
     handleSubmit } = useForm(formRegister);
   const { phone } = values;
 
+  if (isAuthenticated) return <FullPageLoader />;
+
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+      />
       <Link
         className='absolute top-2 left-5 md:left-10'
         href='/'>
@@ -63,11 +99,7 @@ const Register = () => {
       </Link>
       <Link href='/' type='button' className='absolute top-2 right-5 md:right-10 bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'>
         <span className='sr-only'>Close button</span>
-        <Image
-          src={close}
-          height={20}
-          width={20}
-          alt={'close'} />
+        <Close className='h-[24px]' />
       </Link>
       <div className='mx-auto max-w-[472px] py-20 px-6'>
         <h1 className='text-[32px]'>Creat new account</h1>
@@ -138,7 +170,7 @@ const Register = () => {
               buttonClass='!border !border-[#D6DDEB] !border-r-0 !rounded-lg !bg-white'
               country={'us'}
               value={phone}
-              onChange={phone => setValues({ ...values, "phone": phone })}
+              onChange={phone => setValues({ ...values, 'phone': phone })}
             />
             {errors.phone && <span className='text-xs text-red-600'>{errors.phone}</span>}
           </div>
@@ -155,9 +187,11 @@ const Register = () => {
                 name='gender'
                 onChange={handleChange}
               >
-                {options.map((option) => (
-                  <option key={option.value} value={option.value}>{option.label}</option>
-                ))}
+                {
+                  options.map((option) => (
+                    <option key={option.value} value={option.label}>{option.label}</option>
+                  ))
+                }
               </select>
               {errors.gender && <span className='text-xs text-red-600'>{errors.gender}</span>}
             </div>

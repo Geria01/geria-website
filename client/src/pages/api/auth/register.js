@@ -10,7 +10,6 @@ export default async function register(req, res) {
             ...req.body,
             username: req.body.firstname.toLowerCase()
           });
-      console.log('response', response);
       response.status === 200 ?
         res.status(200).json({ message: 'success', token: `${response.data.jwt}` }) :
         res.status(200).json({ message: `${response}` });

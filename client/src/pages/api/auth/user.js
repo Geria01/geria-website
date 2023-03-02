@@ -1,14 +1,21 @@
 import strapiApi from '@/api';
-
 import cookie from 'cookie';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req, res) => {
   if (req.method === 'GET') {
-    const { token } = cookie.parse(req.headers.cookie);
-    if (!token) {
-      res.status(403).json({ message: 'not authorized' });
+
+    let token = null;
+
+    if (req.headers.cookie) {
+      token = cookie.parse(req.headers.cookie).token;
     }
+    console.log('============>  token', token);
+
+    if (!token) {
+      return res.status(403).json({ message: 'not authorized' });
+    }
+
     try {
       const apiRes = await strapiApi.get('/api/users/me', {
         headers: { Authorization: `Bearer ${token}` },

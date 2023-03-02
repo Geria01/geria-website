@@ -3,17 +3,18 @@ import Image from 'next/image';
 
 const Button = (
   {
+    children,
     label,
     href,
     classes,
     iconUrl,
     iconClasses,
     iconHeight,
-    iconWidth
+    iconWidth,
   }) => {
   return (
     <Link
-      className={`font-semibold font[clash_display] ${classes}`}
+      className={`font-semibold whitespace-nowrap font-["Clash_Display"] ${classes}`}
       href={href}>
       {iconUrl &&
         <Image
@@ -23,7 +24,7 @@ const Button = (
           width={iconWidth}
           alt={"Logo"}
         />}
-      {label}
+      {children ? children : label}
     </Link>
   )
 }

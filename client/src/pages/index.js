@@ -30,7 +30,9 @@ export const getStaticProps = async (context) => {
   const data = await fetchQuery('home?populate[hero][populate]=*&populate[steps][populate]=*');
 
   return {
-    props: { ...data },
+    props: {
+      ...data
+    },
   }
 }
 

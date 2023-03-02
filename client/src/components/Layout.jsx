@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 
 export default function Layout({ children }) {
   const router = useRouter();
-  const showNav = ["/register", "/signin"].includes(router.pathname) ? false : true;
+  const showNav = ['/register', '/signin', '/dashboard', '/complete-profile'].includes(router.pathname) ? false : true;
 
   return (
     <>

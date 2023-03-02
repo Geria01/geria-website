@@ -1,31 +1,50 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth';
 import useForm from '@/hooks/useForm';
 import Button from '@/components/Button';
 import logo from '@/public/images/geria_logo.png';
-import close from '@/public/icons/close.svg';
-import linkedInBtnIcon from '@/public/images/linkedin-btn-icon.png';
+import Close from '@/public/icons/close.svg';
+import linkedInBtnIcon from '@/public/icons/linkedin-btn-icon.png';
+import { errorToast, successToast } from '@/utils/toasts';
+import { ToastContainer } from 'react-toastify';
+import FullPageLoader from '@/components/FullPageLoader';
 
 const SignIn = () => {
 
   const router = useRouter();
-  const { signin, setUser, loading, setLoading } = useAuth();
+  const {
+    signin,
+    loading,
+    setLoading,
+    isAuthenticated } = useAuth();
   const [alert, setAlert] = useState(['', '']);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, loading, router]);
+
   const formLogin = async () => {
+
     setLoading(true);
 
     let response = await signin(values);
 
     response[0] == 'error' ?
       setAlert(response) :
-      setUser(response.username);
+      (() => {
+        successToast('Login successful!');
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 5000);
+      })();
+
     setLoading(false);
-    router.push('/dashboard');
   }
 
   const {
@@ -35,8 +54,23 @@ const SignIn = () => {
     errors,
     handleSubmit } = useForm(formLogin);
 
+  if (isAuthenticated) return <FullPageLoader />;
+
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+        theme="light"
+      />
+
       <Link
         className='absolute top-2 left-5 md:left-10'
         href='/'>
@@ -53,11 +87,7 @@ const SignIn = () => {
         items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 
         focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500'>
         <span className='sr-only'>Close button</span>
-        <Image
-          src={close}
-          height={20}
-          width={20}
-          alt={'close'} />
+        <Close className='h-[24px]' />
       </Link>
       <div className='mx-auto max-w-[472px] py-20 px-6'>
         <h1 className='text-[32px]'>Sign in</h1>
@@ -96,7 +126,7 @@ const SignIn = () => {
             />
             {errors.password && <span className='inline-block text-xs text-rose-600 font-medium'>{errors.password}</span>}
           </div>
-          <button className={'w-full block py-4 px-10 rounded-lg font-semibold font[clash_display] bg-[#1c1b17] text-center text-[#FFFFFF]'}>
+          <button className={'w-full block py-4 px-10 rounded-lg font-semibold font[clash_display] bg-[#1c1b17] text-center text-[#FFFFFF]'} disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
           </button>
           <div className='text-right'>

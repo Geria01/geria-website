@@ -43,6 +43,7 @@ const useForm = (callback) => {
   const [errors, setErrors] = useState({});
 
   const validate = (event, name, value) => {
+
     //A function to validate each input values
     switch (name) {
       case 'firstname':
@@ -163,7 +164,7 @@ const useForm = (callback) => {
     setValues,
     errors,
     handleChange,
-    handleSubmit
+    handleSubmit,
   }
 }
 

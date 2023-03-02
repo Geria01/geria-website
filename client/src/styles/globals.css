@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600&family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700&display=swap');
 @import url('https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap');
 
 @tailwind base;
@@ -31,4 +31,50 @@ h5,
 h6 {
   font-family: 'Clash Display', sans-serif;
   font-weight: 600;
+}
+
+.quill {
+  position: relative;
+  margin-bottom: 42px;
+}
+
+.ql-container {
+  font-size: 14px !important;
+}
+
+.quill .ql-toolbar {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  transform: translateY(100%);
+}
+
+.ql-toolbar.ql-snow {
+  border: 1px solid #D6DDEB !important;
+}
+
+.ql-editor.ql-blank::before {
+  font-style: normal !important;
+}
+
+.ql-container.ql-snow {
+  border: 1px solid #D6DDEB !important;
+}
+
+.ql-toolbar.ql-snow+.ql-container.ql-snow {
+  border-bottom: 0px !important;
+}
+
+.ql-editor {
+  font-family: Epilogue, sans-serif !important;
+  height: 150px !important;
+}
+
+.ql-snow .ql-fill {
+  fill: #7C8493 !important;
+}
+
+.ql-snow .ql-stroke {
+  stroke: #7C8493 !important;
 }

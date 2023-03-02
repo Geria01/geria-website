@@ -6,12 +6,12 @@ import cookie from 'cookie';
 export default async (req, res) => {
   if (req.method === 'POST') {
     const { email, password } = req.body;
-    const data = { identifier: email, password };
 
     try {
-      const apiRes = await strapiApi.post('/api/auth/local/', data);
-      const jwt = apiRes.data.jwt;
-      const id = apiRes.data.user.id;
+      const resp = await strapiApi.post('/api/auth/local/',
+      { identifier: email, password });
+      const { jwt } = resp.data;
+      const { id } = resp.data.user;
 
       res.setHeader('Set-Cookie', [
         cookie.serialize('token', jwt, {
@@ -28,14 +28,13 @@ export default async (req, res) => {
           sameSite: 'strict',
           path: '/',
         }),
-      ]).json({ message: "success", user: apiRes.data.user });
+      ]).json({ message: "success", user: resp.data.user });
     } catch (error) {
       if (!error.response.data.error.message) {
-        return res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Somthing went wrong, please try again!' });
       } else {
         const messages = error.response.data.error.message;
-        console.log('next api ======= ', error.response.data);
-        return res.status(400).json({ message: messages });
+        return res.status(400).json({ message: 'Invalid login. Please try again.' });
       }
     }
   }

@@ -3,10 +3,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth';
 import NavItem from './NavItem';
 import logo from '@/public/images/geria_logo.png';
-import styles from '../styles/Navbar.module.css';
 
 const MENU_LIST = [
   { text: 'Home', href: '/' },
@@ -31,7 +30,6 @@ const Navbar = () => {
             <div className='flex items-center justify-between py-3 md:py-5 md:block'>
               <Link href='/'>
                 <Image
-                  className={styles.logo}
                   src={logo}
                   height={35}
                   width={80}

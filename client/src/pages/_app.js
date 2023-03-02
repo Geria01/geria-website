@@ -3,35 +3,28 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import Layout from '@/components/Layout';
-import { AuthProvider, useAuth } from '@/context/AuthContext';
+import Loader from '@/components/FullPageLoader';
+import PrivateRoute from '@/components/PrivateRoute';
+import { AuthProvider, useAuth } from '@/context/auth';
 import '@/styles/globals.css';
 
 export default function App({ Component, pageProps }) {
-  const { setUser } = useAuth();
-  const rounter = useRouter();
+  // Add your protected routes here
+  const protectedRoutes = ['/dashboard, /complete-profile'];
 
   return (
     <>
-      {Component.requiresAuth && (
-        <Head>
-          <script
-            // If no token is found, redirect inmediately
-            dangerouslySetInnerHTML={{
-              __html: `if(!document.cookie || document.cookie.indexOf('token') === -1)
-            {location.replace(
-              "/signin?next=" +
-                encodeURIComponent(location.pathname + location.search)
-            )}
-            else {document.documentElement.classList.add("render")}`,
-            }}
-          />
-        </Head>
-      )}
-      <AuthProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </AuthProvider>
+      {
+        pageProps.requiresAuth && !isAuthenticated ?
+          rounter.push('/signin') :
+          (<AuthProvider>
+            <PrivateRoute protectedRoutes={protectedRoutes}>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </PrivateRoute>
+          </AuthProvider>)
+      }
     </>
   );
 }
